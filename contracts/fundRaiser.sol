@@ -70,6 +70,9 @@ contract FundRaised {
 
         if (fundraiser.totalRaised >= fundraiser.goal) {
             fundraiser.isGoal = true;
+            emit _isGoal(fundraiser.totalRaised, fundraiser.goal);
         }
+
+        emit _fund(_fundName, msg.sender, msg.value);
     }
 }

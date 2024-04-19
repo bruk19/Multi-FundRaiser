@@ -33,4 +33,25 @@ contract FundRaised {
     constructor() {
         owner = msg.sender;
     }
+
+    function createFundRaise(
+        string memory _fundName,
+        uint _goal,
+        uint _timeDuration
+    ) public {
+        fundInfo storage fundraiser = fundRaiseds[_fundName];
+        require(
+            bytes(_fundName).length > 0,
+            "there should be a name for the fundme"
+        );
+        require(
+            fundraiser.goal == 0,
+            "fundraiser already exist with the same name"
+        );
+
+        fundraiser.fundRaiserCreator = msg.sender;
+        fundraiser.goal = _goal * 1 ether;
+        fundraiser.timeDuration = block.timestamp + _timeDuration * 1 minutes;
+        fundNames.push(_fundName);
+    }
 }

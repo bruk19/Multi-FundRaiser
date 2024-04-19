@@ -103,4 +103,8 @@ contract FundRaised {
             }
         }
     }
+
+    function listofFunds() public view returns (string[] memory) {
+        return fundNames;
+    }
 }

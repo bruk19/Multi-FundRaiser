@@ -54,4 +54,22 @@ contract FundRaised {
         fundraiser.timeDuration = block.timestamp + _timeDuration * 1 minutes;
         fundNames.push(_fundName);
     }
+
+    function fund(string memory _fundName) public payable {
+        fundInfo storage fundraiser = fundRaiseds[_fundName];
+        require(fundraiser.goal > 0, "the fund is not created");
+        require(
+            block.timestamp <= fundraiser.timeDuration,
+            "the fund time duration is end"
+        );
+        require(msg.value > 0, "you can sent 0 value");
+
+        fundraiser.fundRaised[msg.sender] += msg.value;
+        fundraiser.totalRaised += msg.value;
+        fundraiser.fundersList.push(msg.sender);
+
+        if (fundraiser.totalRaised >= fundraiser.goal) {
+            fundraiser.isGoal = true;
+        }
+    }
 }

@@ -29,4 +29,8 @@ contract FundRaised {
         uint indexed _amount
     );
     event _refund(address indexed _address, uint indexed _amount);
+
+    constructor() {
+        owner = msg.sender;
+    }
 }

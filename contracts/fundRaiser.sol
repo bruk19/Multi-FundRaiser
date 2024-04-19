@@ -107,4 +107,10 @@ contract FundRaised {
     function listofFunds() public view returns (string[] memory) {
         return fundNames;
     }
+
+    function whoFund(
+        string memory _funders
+    ) public view returns (address[] memory _fundersList) {
+        _fundersList = fundRaiseds[_funders].fundersList;
+    }
 }

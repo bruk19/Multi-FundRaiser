@@ -75,4 +75,32 @@ contract FundRaised {
 
         emit _fund(_fundName, msg.sender, msg.value);
     }
+
+    function withdrawnOrRefund(string memory _fundName) public {
+        fundInfo storage fundraiser = fundRaiseds[_fundName];
+        require(
+            block.timestamp >= fundraiser.timeDuration,
+            "the fund time duration is end"
+        );
+
+        if (fundraiser.isGoal) {
+            uint amt = fundraiser.totalRaised;
+            fundraiser.totalRaised = 0;
+            fundraiser.isTimeDuration = true;
+            payable(fundraiser.fundRaiserCreator).transfer(amt);
+
+            emit _withdraw(_fundName, msg.sender, amt);
+        } else {
+            address[] storage funders = fundraiser.fundersList;
+            for (uint i = 0; i < funders.length; i++) {
+                address funder = funders[i];
+
+                uint amount = fundraiser.fundRaised[funder];
+                fundraiser.fundRaised[funder] = 0;
+                payable(funder).transfer(amount);
+
+                emit _refund(msg.sender, amount);
+            }
+        }
+    }
 }

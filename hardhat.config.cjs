@@ -24,4 +24,14 @@ module.exports = {
   etherscan: {
     apiKey: ETHERSCAN_API_KEY,
   },
+  paths: {
+    sources: "./contracts",
+    tests: "./test",
+  },
+  mocha: {
+    timeout: 40000,
+  },
+  esm: {
+    nodeInterop: true,
+  },
 };

@@ -12,5 +12,11 @@
   "dependencies": {
     "chai": "^5.1.0",
     "solc": "^0.8.25"
-  }
+  },
+  
+  "name": "my-package",
+  "scripts": {
+    "test": "jest"
+  },
+  "type": "module"
 }

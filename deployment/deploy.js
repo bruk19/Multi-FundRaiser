@@ -11,6 +11,7 @@ async function main() {
     await fundRaised.deployTransaction.wait(6)
     await verify(fundRaised.address, [])
   }
+
 }
 
 async function verify(contractAddress, args) {

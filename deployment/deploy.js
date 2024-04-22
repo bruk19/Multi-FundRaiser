@@ -1,11 +1,11 @@
-const { ethers, run, network } = require("hardhat");
-
+import hardhat from "hardhat";
+const { ethers, run, network } = hardhat;
 
 async function main() {
   const FundRaised = await ethers.getContractFactory("FundRaised");
   const fundRaised = await FundRaised.deploy();
-
   await fundRaised.deployed();
+
   console.log("FundRaised contract deployed to:", fundRaised.address);
   if (network.config.chainId === 31337 && process.env.ETHERSCAN_API_KEY) {
     await fundRaised.deployTransaction.wait(6)

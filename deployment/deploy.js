@@ -8,6 +8,7 @@ async function main() {
   await fundRaised.deployed();
   console.log("FundRaised contract deployed to:", fundRaised.address);
   if (network.config.chainId === 31337 && process.env.ETHERSCAN_API_KEY) {
+    await fundRaised.deployTransaction.wait(6)
     await verify(fundRaised.address, [])
   }
 }

@@ -28,7 +28,7 @@ describe("FundRaised", function () {
       await fundRaised.createFundRaise("Test FundRaise", 1000, 60);
       await expect(
         fundRaised.createFundRaise("Test FundRaise", 2000, 120)
-      ).to.be.rrejectedWith("fundraiser already exist with the same name");
+      ).to.be.rejectedWith("fundraiser already exist with the same name");
     });
   })
 

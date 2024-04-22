@@ -6,27 +6,25 @@ async function main() {
   const fundRaised = await FundRaised.deploy();
 
   await fundRaised.deployed();
-
   console.log("FundRaised contract deployed to:", fundRaised.address);
-
-  console.log(network.config)
-
-
+  if (network.config.chainId === 31337 && process.env.ETHERSCAN_API_KEY) {
+    await verify(fundRaised.address, [])
   }
-  async function verify(contractAddress, args) {
-    console.log("verify contract.....")
-    try {
-      await run("verify:verify", {
-        address: contractAddress,
-        constructorArguments: args,
-      })
-    } catch (e) {
-      if (e.message.toLowerCase().includes("already verified")) {
-        console.log("Already Verified")
-      }
-      else {
-        console.log(e)
-      }
+}
+
+async function verify(contractAddress, args) {
+  console.log("verify contract.....")
+  try {
+    await run("verify:verify", {
+      address: contractAddress,
+      constructorArguments: args,
+    })
+  } catch (e) {
+    if (e.message.toLowerCase().includes("already verified")) {
+      console.log("Already Verified")
+    }
+    else {
+      console.log(e)
     }
   }
 }

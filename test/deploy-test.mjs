@@ -10,8 +10,6 @@ describe("FundRaised", function () {
   beforeEach(async function () {
     [owner, funder1, funder2] = await ethers.getSigners();
     FundRaised = await ethers.getContractFactory("FundRaised")
-    fundRaised = await FundRaised.deploy()
-    await fundRaised.deployed();
   });
 
   describe("createFundRaise", function () {
@@ -28,8 +26,35 @@ describe("FundRaised", function () {
       await fundRaised.createFundRaise("Test FundRaise", 1000, 60);
       await expect(
         fundRaised.createFundRaise("Test FundRaise", 2000, 120)
-      ).to.be.rejectedWith("fundraiser already exist with the same name");
+      ).to.be.rejected("fundraiser already exist with the same name");
     });
   })
+
+  describe("fund", function () {
+    it("should allow users to fund a campaign", async function () {
+      await fundRaised.createFundRaise("Test Fund", 1000, 60);
+      await fundRaised.connect(user1).fund("Test Fund", { value: 100 });
+      const fund = await fundRaised.fundRaiseds("Test Fund");
+      expect(fund.fundRaised[user1.address]).to.equal(100);
+      expect(fund.totalRaised).to.equal(100);
+    });
+
+    it("should not allow funding after the time duration is over", async function () {
+      await fundRaised.createFundRaise("Test Fund", 1000, 1);
+      await ethers.provider.send("evm_increaseTime", [120]);
+      await ethers.provider.send("evm_mine", []);
+      await expect(
+        fundRaised.connect(user1).fund("Test Fund", { value: 100 })
+      ).to.be.revertedWith("the fund time duration is end");
+    });
+
+    it("should emit the _fund event", async function () {
+      await fundRaised.createFundRaise("Test Fund", 1000, 60);
+      await expect(fundRaised.connect(user1).fund("Test Fund", { value: 100 }))
+        .to.emit(fundRaised, "_fund")
+        .withArgs("Test Fund", user1.address, 100);
+    });
+  });
+
 
 })

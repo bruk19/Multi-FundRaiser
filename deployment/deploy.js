@@ -4,7 +4,6 @@ const { ethers, run, network } = hardhat;
 async function main() {
   const FundRaised = await ethers.getContractFactory("FundRaised");
   const fundRaised = await FundRaised.deploy();
-  await fundRaised.waitForDeployment ()
 
   console.log("FundRaised contract deployed to:", fundRaised.target);
   if (network.config.chainId === 31337 && process.env.ETHERSCAN_API_KEY) {

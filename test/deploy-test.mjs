@@ -39,6 +39,15 @@ describe("FundRaised", function () {
       expect(fund.totalRaised).to.equal(100);
     });
 
+    it("should not allow funding after the time duration is over", async function () {
+      await fundRaised.createFundRaise("Test Fund", 1000, 1);
+      await ethers.provider.send("evm_increaseTime", [120]);
+      await ethers.provider.send("evm_mine", []);
+      await expect(
+        fundRaised.connect(user1).fund("Test Fund", { value: 100 })
+      ).to.be.revertedWith("the fund time duration is end");
+    });
+
     it("should emit the _fund event", async function () {
       await fundRaised.createFundRaise("Test Fund", 1000, 60);
       await expect(fundRaised.connect(user1).fund("Test Fund", { value: 100 }))
@@ -46,5 +55,6 @@ describe("FundRaised", function () {
         .withArgs("Test Fund", user1.address, 100);
     });
   });
+
 
 })

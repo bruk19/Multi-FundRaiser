@@ -56,5 +56,10 @@ describe("FundRaised", function () {
     });
   });
 
+  it("should not create a fund with an empty name", async function () {
+  await expect(fundRaised.createFundRaise("", 1000, 60)).to.be.revertedWith(
+    "there should be a name for the fundme"
+  );
+});
 
 })

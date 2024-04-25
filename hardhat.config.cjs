@@ -25,6 +25,17 @@ module.exports = {
   etherscan: {
     apiKey: ETHERSCAN_API_KEY,
   },
+  namedAccounts: {
+    owner: {
+      default: 0,
+    },
+    funder1: {
+      default:  1,
+    },
+    funder2: {
+      default: 2
+    }
+  },
   paths: {
     sources: "./contracts",
     tests: "./test",

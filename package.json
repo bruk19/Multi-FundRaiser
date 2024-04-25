@@ -2,7 +2,6 @@
   "devDependencies": {
     "@nomicfoundation/hardhat-ethers": "^3.0.5",
     "@nomicfoundation/hardhat-toolbox": "^5.0.0",
-    "@nomiclabs/hardhat-ethers": "npm:hardhat-deploy-ethers",
     "@nomiclabs/hardhat-etherscan": "^3.1.8",
     "dotenv": "^16.4.5",
     "ethers": "^6.12.0",
@@ -11,6 +10,7 @@
     "npm": "^10.5.2"
   },
   "dependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.2.3",
     "chai": "^5.1.0",
     "solc": "^0.8.25"
   },

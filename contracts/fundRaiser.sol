@@ -71,7 +71,7 @@ contract FundRaised {
 
     function fund(string memory _fundName) public payable {
         fundInfo storage fundraiser = fundRaiseds[_fundName];
-        require(fundraiser.goal > 0, "the fund is not created");
+        require(checkFundIsCreated(_fundName), "The fund is not created");
         require(
             block.timestamp <= fundraiser.timeDuration,
             "the fund time duration is end"
@@ -88,6 +88,19 @@ contract FundRaised {
         }
 
         emit _fund(_fundName, msg.sender, msg.value);
+    }
+
+     function checkFundIsCreated(
+        string memory _fundName
+    ) internal view returns (bool) {
+        for (uint256 i = 0; i < fundNames.length; i++) {
+            if (
+                keccak256(bytes(fundNames[i])) == (keccak256(bytes(_fundName)))
+            ) {
+                return true;
+            }
+        }
+        return false;
     }
 
     function withdrawnOrRefund(string memory _fundName) public {

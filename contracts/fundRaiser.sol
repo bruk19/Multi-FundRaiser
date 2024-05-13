@@ -44,6 +44,7 @@ contract FundRaised {
             bytes(_fundName).length > 0,
             "there should be a name for the fundme"
         );
+        require(checkFundName(_fundName), "This fund name is already created");
         require(
             fundraiser.goal == 0,
             "fundraiser already exist with the same name"
@@ -53,6 +54,19 @@ contract FundRaised {
         fundraiser.goal = _goal * 1 ether;
         fundraiser.timeDuration = block.timestamp + _timeDuration * 1 minutes;
         fundNames.push(_fundName);
+    }
+
+    function checkFundName(
+        string memory _fundName
+    ) internal view returns (bool) {
+        for (uint256 i = 0; i < fundNames.length; i++) {
+            if (
+                keccak256(bytes(fundNames[i])) == (keccak256(bytes(_fundName)))
+            ) {
+                return false;
+            }
+        }
+        return true;
     }
 
     function fund(string memory _fundName) public payable {

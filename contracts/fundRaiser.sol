@@ -90,7 +90,7 @@ contract FundRaised {
         emit _fund(_fundName, msg.sender, msg.value);
     }
 
-     function checkFundIsCreated(
+    function checkFundIsCreated(
         string memory _fundName
     ) internal view returns (bool) {
         for (uint256 i = 0; i < fundNames.length; i++) {
@@ -139,5 +139,13 @@ contract FundRaised {
         string memory _funders
     ) public view returns (address[] memory _fundersList) {
         _fundersList = fundRaiseds[_funders].fundersList;
+    }
+
+    function howMuchFunded(
+        string memory _fundName,
+        address _address
+    ) public view returns (uint256) {
+        fundInfo storage fundraiser = fundRaiseds[_fundName];
+        return fundraiser.fundRaised[_address];
     }
 }

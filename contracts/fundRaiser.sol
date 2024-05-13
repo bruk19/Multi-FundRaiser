@@ -44,6 +44,7 @@ contract FundRaised {
             bytes(_fundName).length > 0,
             "there should be a name for the fundme"
         );
+        require(checkFundName(_fundName), "This fund name is already created");
         require(
             fundraiser.goal == 0,
             "fundraiser already exist with the same name"
@@ -55,9 +56,22 @@ contract FundRaised {
         fundNames.push(_fundName);
     }
 
+    function checkFundName(
+        string memory _fundName
+    ) internal view returns (bool) {
+        for (uint256 i = 0; i < fundNames.length; i++) {
+            if (
+                keccak256(bytes(fundNames[i])) == (keccak256(bytes(_fundName)))
+            ) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     function fund(string memory _fundName) public payable {
         fundInfo storage fundraiser = fundRaiseds[_fundName];
-        require(fundraiser.goal > 0, "the fund is not created");
+        require(checkFundIsCreated(_fundName), "The fund is not created");
         require(
             block.timestamp <= fundraiser.timeDuration,
             "the fund time duration is end"
@@ -74,6 +88,19 @@ contract FundRaised {
         }
 
         emit _fund(_fundName, msg.sender, msg.value);
+    }
+
+    function checkFundIsCreated(
+        string memory _fundName
+    ) internal view returns (bool) {
+        for (uint256 i = 0; i < fundNames.length; i++) {
+            if (
+                keccak256(bytes(fundNames[i])) == (keccak256(bytes(_fundName)))
+            ) {
+                return true;
+            }
+        }
+        return false;
     }
 
     function withdrawnOrRefund(string memory _fundName) public {
@@ -112,5 +139,13 @@ contract FundRaised {
         string memory _funders
     ) public view returns (address[] memory _fundersList) {
         _fundersList = fundRaiseds[_funders].fundersList;
+    }
+
+    function howMuchFunded(
+        string memory _fundName,
+        address _address
+    ) public view returns (uint256) {
+        fundInfo storage fundraiser = fundRaiseds[_fundName];
+        return fundraiser.fundRaised[_address];
     }
 }
